@@ -10,13 +10,22 @@ Par exemple je peux concevoir tout le front avec Angular (un peu overkill mais i
 
 L'API met en place 2 routes accessibles uniquement avec des requêtes POST.
 
-La première, /api/pendu, permet de créer un objet pendu défini comme ceci :
-```	word: String,
-	found: String,
-	miss: Number,
-	charSent: []
-	```
+La première, `/api/pendu`, permet de créer un objet Pendu défini comme ceci :
+```	
+word: String,
+found: String,
+miss: Number,
+charSent: []
+```
+`word` contient la string qui devra être devinée, `found` la string avec les lettre trouvées et des '_' à la place des autres, `miss` le nombre de coups manqués et `charSent` l'ensemble des lettre ayant été envoyées par l'utilisateur (pour éviter d'envoyer plusieurs fois la même).
 
+Cette route renvoit un code erreur 2 en cas de requête non valide (voir plus loin pour les codes d'erreur). En cas de réussite de la rêquete elle renvoit un objet contenant une string vide de la taille du mot à deviner et un id à envoyer dans les requêtes suivantes en paramètre.
+
+La deuxième, `/api/pendu/:id`, permet d'envoyer un charactère et avoir une réponse cohérente afin de progresser dans le jeu. Elle attend un id spécifié en paramètre et un objet possédant une propriété `char` qui contient un char.
+
+Elle renvoit un objet consitué de quatre éléments : un code alerte dans `data.code`, le mot en train d'être trouvé dans `data.found`, une url d'une image de pendu pouvant être utilisée pour montrer où en est l'utilisateur dans le jeu dans `data.image` et le nombre de fois qu'il s'est trompé dans `data.miss`.
+
+Voila les différents code d'alerte que peut renvoyer l'API :
 
 - 1 = "Lettre trouvée !"
 - 2 = "Mauvais input"
